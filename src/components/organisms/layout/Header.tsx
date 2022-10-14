@@ -1,21 +1,24 @@
-import { memo, VFC } from "react";
-import {
-  DrawerContent,
-  DrawerBody,
-  Drawer,
-  DrawerOverlay,
-  Flex,
-  Heading,
-  Link,
-  Box,
-  Button,
-  useDisclosure,
-} from "@chakra-ui/react";
+import { memo, useCallback, VFC } from "react";
+import { Flex, Heading, Link, Box, useDisclosure } from "@chakra-ui/react";
 import { MenuIconButton } from "../../atoms/button/MenuIconButton";
 import { MenuDrawer } from "../../molecules/MenuDrawer";
+import { useNavigate } from "react-router-dom";
 
 export const Header: VFC = memo(() => {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const navigate = useNavigate();
+
+  const onClickHome = useCallback(() => {
+    navigate("/home");
+  }, []);
+
+  const onClickUserManagement = useCallback(() => {
+    navigate("/home/user_management");
+  }, []);
+
+  const onClickSetting = useCallback(() => {
+    navigate("/home/setting");
+  }, []);
 
   return (
     <>
@@ -27,7 +30,13 @@ export const Header: VFC = memo(() => {
         justify="space-between"
         padding={{ base: 3, md: 5 }}
       >
-        <Flex align="center" as="a" mr={8} _hover={{ cursor: "pointer" }}>
+        <Flex
+          align="center"
+          as="a"
+          mr={8}
+          _hover={{ cursor: "pointer" }}
+          onClick={onClickHome}
+        >
           <Heading as="h1" fontSize={{ base: "md", md: "lg" }}>
             UserManagementApp
           </Heading>
@@ -39,13 +48,19 @@ export const Header: VFC = memo(() => {
           display={{ base: "none", md: "flex" }}
         >
           <Box pr={4}>
-            <Link>UserList</Link>
+            <Link onClick={onClickUserManagement}>UserList</Link>
           </Box>
-          <Link>Setting</Link>
+          <Link onClick={onClickSetting}>Setting</Link>
         </Flex>
         <MenuIconButton onOpen={onOpen} />
       </Flex>
-      <MenuDrawer onClose={onClose} isOpen={isOpen} />
+      <MenuDrawer
+        onClose={onClose}
+        isOpen={isOpen}
+        onClickHome={onClickHome}
+        onClickSetting={onClickSetting}
+        onClickUserManagement={onClickUserManagement}
+      />
     </>
   );
 });
