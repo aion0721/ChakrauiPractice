@@ -21,7 +21,7 @@ export const PrimaryButton: VFC<Props> = memo((props) => {
       isLoading={loading}
       onClick={onClick}
     >
-      Login
+      {children}
     </Button>
   );
 });
