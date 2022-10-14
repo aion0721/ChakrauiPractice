@@ -2,8 +2,10 @@ import axios from "axios";
 import { useCallback, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { User } from "../types/api/user";
+import { useMessage } from "./useMessage";
 
 export const useAuth = () => {
+  const { showMessage } = useMessage();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const login = useCallback((id: string) => {
@@ -12,12 +14,13 @@ export const useAuth = () => {
       .get<User>(`https://jsonplaceholder.typicode.com/users/${id}`)
       .then((res) => {
         if (res.data) {
+          showMessage({ title: "login successfully", status: "success" });
           navigate("/home");
         } else {
-          alert("not found user");
+          showMessage({ title: "Not found userid", status: "error" });
         }
       })
-      .catch(() => alert("Cannot login"))
+      .catch(() => showMessage({ title: "cannot login", status: "error" }))
       .finally(() => setLoading(false));
   }, []);
   return { login, loading };
